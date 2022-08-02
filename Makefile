@@ -7,13 +7,13 @@ up:
 down:
 	docker compose -f local.yml down
 
-show_logs:
+logs:
 	docker compose -f local.yml logs
 
 migrate:
 	docker compose -f local.yml run --rm api python3 manage.py migrate
 
-migrations:
+makemigrations:
 	docker compose -f local.yml run --rm api python3 manage.py makemigrations
 
 collectstatic:
@@ -26,11 +26,10 @@ down-v:
 	docker compose -f local.yml down -v
 
 volume:
-	docker volume inspect auth-src_local_postgres_data
+	docker volume inspect authors-src_local_postgres_data
 
-auth-db:
-	docker compose -f local.yml exec postgres psql --username=admin 
-	--dbname=postgres
+authors-db:
+	docker compose -f local.yml exec postgres psql --username=alphaogilo --dbname=authors-live
 
 flake8:
 	docker compose -f local.yml exec api flake8 .
@@ -51,5 +50,5 @@ isort-diff:
 	docker compose -f local.yml exec api isort . --diff --skip env --skip migrations
 
 isort:
-	docker compose -f local.yml exec api isort . --skip env --skip migrations
-	
+	docker compose -f local.yml exec api isort . --skip env --skip migrations	
+

@@ -1,7 +1,6 @@
-from asyncio.unix_events import DefaultEventLoopPolicy
-from tkinter.tix import Tree
+
 import uuid
-from black import TRANSFORMED_MAGICS
+
 
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
@@ -43,3 +42,5 @@ class User(AbstractBaseUser, PermissionsMixin):
         return f"{self.first_name.title()} {self.last_name.title()}"
 
 
+    def get_short_name(self):
+        return self.first_name
