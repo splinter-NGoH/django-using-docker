@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+
 import environ
 
 env = environ.Env()
@@ -49,8 +50,8 @@ THIRD_PARTY_APPS = [
     "django_countries",
     "phonenumber_field",
     "drf_yasg",
-    "corsheaders"
-
+    "corsheaders",
+    "djcelery_email",
 ]
 
 LOC_APPS = ["core_apps.common", "core_apps.users", "core_apps.profiles",]
@@ -141,7 +142,7 @@ USE_TZ = True
 
 SITE_ID = 1
 
-ADMIN_URL = "admin/"
+ADMIN_URL = "supersecret/"
 ADMINS = [("""Ahmed Mansy""", """ahmedmansy265@gmail.com""")]
 MANAGERS = ADMINS
 # Static files (CSS, JavaScript, Images)
@@ -157,7 +158,7 @@ STATICFILES_FINDERS = [
 ]
 
 MEDIA_URL = "/mediafiles/"
-MEDIA_ROOT = str(ROOT_DIR / "media")
+MEDIA_ROOT = str(ROOT_DIR / "mediafiles")
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -166,9 +167,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_URLS_REGEX = r"^/api/.*$"
 
-
+CELERY_BROKER_URL = env("CELERY_BROKER")
+CELERY_RESULT_BACKEND = env("CELERY_BACKEND")
+CELERY_TIMEZONE = "Africa/Cairo"
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = 'json'
 
 AUTH_USER_MODEL="users.User"
+
+REST_FRAMEWORK = {
+    "EXCEPTION_HANDLER": "core_apps.common.exceptions.common_exception_handler",
+    "NON_FIELD_ERRORS_KEY": "error",
+}
 LOGGING = {
     "version":1,
     "disable_existing_loggers": False,

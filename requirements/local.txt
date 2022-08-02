@@ -8,3 +8,6 @@ black==21.12b0
 
 isort==5.9.3
 
+argh==0.26.2
+pyYAML==6.0
+watchdog==2.1.6

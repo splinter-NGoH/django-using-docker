@@ -1,0 +1,7 @@
+
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+
+watchmedo auto-restart -d auth_api/ -p '*.py' -- celery -A auth_api worker --loglevel=info

@@ -12,15 +12,15 @@ services:
       - static_volume:/app/staticfiles
       - media_volume:/app/mediafiles
 
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     env_file:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
     depends_on:
       - postgres
       - mailhog
-
+      - redis
     networks:
       - auth-api
 
@@ -45,7 +45,60 @@ services:
       - "8025:8025"
     networks:
       - auth-api
-
+  redis:
+    image: redis:6-alpine
+    container_name: redis
+    networks:
+      - auth-api
+  celery_worker:
+    build:
+      context: .
+      dockerfile: ./docker/local/django/Dockerfile
+    command: /start-celeryworker
+    container_name: celery_worker
+    volumes:
+      - .:/app
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    depends_on:
+      - redis
+      - postgres
+      - mailhog
+    networks:
+      - auth-api
+  flower:
+    build:
+      context: .
+      dockerfile: ./docker/local/django/Dockerfile
+    command: /start-flower
+    container_name: flower
+    volumes:
+      - .:/app
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - auth-api 
+  nginx:
+    restart: always
+    depends_on:
+        - api
+    volumes:
+        - static_volume:/app/staticfiles
+        - media_volume:/app/mediafiles
+    build:
+        context: ./docker/local/nginx
+        dockerfile: Dockerfile
+    ports:
+        - "8080:80"
+    networks:
+        - auth-api
 networks:
   auth-api:
     driver: bridge
