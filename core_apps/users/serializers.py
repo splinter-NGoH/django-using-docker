@@ -16,7 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
     city = serializers.CharField(source="profile.city")
     first_name = serializers.SerializerMethodField()
     last_name = serializers.SerializerMethodField()
-    full_name = serializers.SerializerMethodField()
+    full_name = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User

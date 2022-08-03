@@ -47,15 +47,21 @@ class Profile(TimeStampUUIDModel):
 
     def __str__(self):
         return f"{self.user.username}'s profile"
+
     def following_list(self):
         return self.follows.all()
+
     def followers_list(self):
         return self.followed_by.all()
+
     def follow(self, profile):
         self.follows.add(profile)
+
     def unfollow(self, profile):
         self.follows.remove(profile)
+
     def check_following(self,profile):
         return self.follows.filter(pkid=profile.pkid).exists()
+        
     def check_is_followed_by(self,profile):
         return self.followed_by.filter(pkid=profile.pkid).exists()
