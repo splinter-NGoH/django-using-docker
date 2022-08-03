@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from re import T
 
 import environ
 
@@ -52,6 +53,8 @@ THIRD_PARTY_APPS = [
     "drf_yasg",
     "corsheaders",
     "djcelery_email",
+    "djoser",
+    "rest_framework_simplejwt",
 ]
 
 LOC_APPS = ["core_apps.common", "core_apps.users", "core_apps.profiles",]
@@ -179,7 +182,42 @@ AUTH_USER_MODEL="users.User"
 REST_FRAMEWORK = {
     "EXCEPTION_HANDLER": "core_apps.common.exceptions.common_exception_handler",
     "NON_FIELD_ERRORS_KEY": "error",
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
 }
+
+from datetime import timedelta
+SIMPLE_JWT = {
+    "AUTH_HEADER_TYPES": ("Bearer", "JWT",),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=720),
+    "REFRESH_TOKEN_LIVE_TIME": timedelta(days=1),
+    "SIGNING_KEY": env("SIGNING_KEY"),
+    "AUTH_HEADER_NAME": "HTPP_AUTHORIZATION",
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+
+}
+
+DJOSER={
+    "LOGIN_FIELD":"email",
+    "USER_CREATE_PASSWORD_RETYPE": True,
+    "USERNAME_CHANGED_EMAIL_CONFIRMATION": True,
+    "PASSWORD_CHANGE_EMAIL_CONFIRMATION": True,
+    "SEND_CONFIRMATION_EMAIL": True,
+    "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
+    "SET_PASSWORD_RETUPE":True,
+    "PASSWORD_RESET_CONFIRM_RETYPE":True,
+    "USERNAME_RESET_CONFIRM_URL":"password/reset/confirm/{uid}/{token}",
+    "ACTIVATION_URL": "activate/{uid}/{token}",
+    "SEND_ACTIVATION_EMAIL":True,
+    "SERIALIZERS":{
+        "user_create": "core_apps.users.serializers.CreateUserSerializer",
+        "user": "core_apps.users.serializers.UserSerializer",
+        "current_user": "core_apps.users.serializers.UserSerializer",
+        "user_delete":"djoser.serializers.UserDeleteSerializer",
+    },
+}
+
 LOGGING = {
     "version":1,
     "disable_existing_loggers": False,
