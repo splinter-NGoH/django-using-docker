@@ -55,9 +55,13 @@ THIRD_PARTY_APPS = [
     "djcelery_email",
     "djoser",
     "rest_framework_simplejwt",
+    "haystack",
+    "drf_haystack"
 ]
 
-LOC_APPS = ["core_apps.common", "core_apps.users", "core_apps.profiles",]
+LOC_APPS = ["core_apps.common", "core_apps.users", "core_apps.profiles",
+    "core_apps.comments", "core_apps.articles", "core_apps.favorites", "core_apps.rating", "core_apps.reactions", "core_apps.search",
+    ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOC_APPS
 MIDDLEWARE = [
@@ -217,6 +221,15 @@ DJOSER={
         "user_delete":"djoser.serializers.UserDeleteSerializer",
     },
 }
+
+HAYSTACK_CONNECTIONS = {
+    "default" :{
+        "ENGINE": "haystack.backends.woosh_backend.WhooshEngine",
+        "PATH": ROOT_DIR / "whoosh_index",
+    }
+}
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 10
+HAYSTACK_SIGNAL_PROCESSOR = "haystack.signals.RealtimeSignalProcessor"
 
 LOGGING = {
     "version":1,
