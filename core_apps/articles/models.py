@@ -65,4 +65,4 @@ class ArticleViews (TimeStampUUIDModel):
 
     class Meta:
         verbose_name = _("Total views on Article")
-        verbose_name_plural = _("total views")
+        verbose_name_plural = _("total article views")
