@@ -1,4 +1,3 @@
-
 import uuid
 
 
@@ -15,18 +14,25 @@ from .managers import CustomUserManger
 class User(AbstractBaseUser, PermissionsMixin):
     pkid = models.BigAutoField(primary_key=True, editable=False)
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    username = models.CharField(verbose_name=_("username"), db_index=True, max_length=255, unique=True)
-    first_name= models.CharField(verbose_name=_("first_name"), max_length=50)
-    last_name= models.CharField(verbose_name=_("last_name"), max_length=50)
-    email=models.EmailField(verbose_name=_("email address"), db_index=True, unique=True)
-    is_staff=models.BooleanField(default=False)
-    is_active=models.BooleanField(default=True)
+    username = models.CharField(
+        verbose_name=_("username"), db_index=True, max_length=255, unique=True
+    )
+    first_name = models.CharField(verbose_name=_("first_name"), max_length=50)
+    last_name = models.CharField(verbose_name=_("last_name"), max_length=50)
+    email = models.EmailField(
+        verbose_name=_("email address"), db_index=True, unique=True
+    )
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     created_at = models.DateTimeField(default=timezone.now)
-    
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username", "first_name", "last_name",]
+    REQUIRED_FIELDS = [
+        "username",
+        "first_name",
+        "last_name",
+    ]
 
     objects = CustomUserManger()
 
@@ -40,7 +46,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def get_full_name(self):
         return f"{self.first_name.title()} {self.last_name.title()}"
-
 
     def get_short_name(self):
         return self.first_name

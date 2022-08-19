@@ -10,14 +10,30 @@ class UserAdmin(BaseUserAdmin):
     add_form = UserCreationForm
     form = UserChangeForm
     moedl = User
-    list_display = ["pkid", "id", "email", "username", "first_name", "last_name", "is_staff", "is_active",]
+    list_display = [
+        "pkid",
+        "id",
+        "email",
+        "username",
+        "first_name",
+        "last_name",
+        "is_staff",
+        "is_active",
+    ]
     list_display_links = ["id", "email"]
-    list_filter = ["email", "username", "first_name", "last_name", "last_name", "is_staff"]
+    list_filter = [
+        "email",
+        "username",
+        "first_name",
+        "last_name",
+        "last_name",
+        "is_staff",
+    ]
     fields_sets = (
         (
             _("Login Credentials"),
             {
-                "fields":(
+                "fields": (
                     "email",
                     "password",
                 )
@@ -26,31 +42,56 @@ class UserAdmin(BaseUserAdmin):
         (
             _("personal_information"),
             {
-                "fields": ("username", "first_name", "lastname",),
+                "fields": (
+                    "username",
+                    "first_name",
+                    "lastname",
+                ),
             },
         ),
         (
             _("permissions_and_goups"),
             {
-                "fields":("is_active", "is_staff", "is_superuser", "groups", "user_permissions",),
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                ),
             },
         ),
         (
-          _("Important_dates"),
-          {
-            "fields":("last_login", "created_at",),
-          },  
+            _("Important_dates"),
+            {
+                "fields": (
+                    "last_login",
+                    "created_at",
+                ),
+            },
         ),
     )
     add_fieldsets = (
         (
-          None,
-          {
-            "classes":("wide",),
-            "fields":("email","password1", "password2", "is_staff", "is_active",),
-          } , 
+            None,
+            {
+                "classes": ("wide",),
+                "fields": (
+                    "email",
+                    "password1",
+                    "password2",
+                    "is_staff",
+                    "is_active",
+                ),
+            },
         ),
     )
-    search_fields = ["email", "username", "first_name", "last_name",]
+    search_fields = [
+        "email",
+        "username",
+        "first_name",
+        "last_name",
+    ]
+
 
 admin.site.register(User, UserAdmin)

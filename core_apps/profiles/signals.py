@@ -15,6 +15,7 @@ def create_profile_for_user(sender, instance, created, **kwargs):
         Profile.objects.create(user=instance)
         logger.info(f"Profile created for {instance.username}")
 
+
 @receiver(post_save, sender=AUTH_USER_MODEL)
 def save_profile_for_user(sender, instance, **kwargs):
     instance.profile.save()

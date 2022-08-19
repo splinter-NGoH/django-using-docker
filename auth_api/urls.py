@@ -25,6 +25,6 @@ urlpatterns = [
     path("api/v1/profiles/", include("core_apps.profiles.urls")),
 ]
 
-admin.site.site_header= "Auth API"
+admin.site.site_header = "Auth API"
 admin.site.site_title = "Auth API"
 admin.site.index_title = "Welcome to the Auth Site"

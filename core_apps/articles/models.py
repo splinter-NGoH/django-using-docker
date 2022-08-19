@@ -13,6 +13,7 @@ from .read_time_engine import ArticleReadTimeEngine
 
 User = get_user_model()
 
+
 class Tag(TimeStampUUIDModel):
     tag = models.CharField(max_length=80)
     slug = models.SlugField(db_index=True, unique=True)
@@ -25,16 +26,20 @@ class Tag(TimeStampUUIDModel):
 
 
 class Article(TimeStampUUIDModel):
-    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("user"), related_name="articles")
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, verbose_name=_("user"), related_name="articles"
+    )
     title = models.CharField(verbose_name=_("title"), max_length=250)
     slug = AutoSlugField(populate_from="title", always_update=True, unique=True)
     description = models.CharField(verbose_name=_("description"), max_length=255)
     body = models.TextField(verbose_name=_("article content"))
-    banner_image = models.ImageField(verbose_name=_("banner image"), default="/house_sample.jpg")
+    banner_image = models.ImageField(
+        verbose_name=_("banner image"), default="/house_sample.jpg"
+    )
     tags = models.ManyToManyField(Tag, related_name="articles")
     views = models.IntegerField(verbose_name=_("article views"), default=0)
 
-    def __str__(self) :
+    def __str__(self):
         return f"{self.auther.username}'s article"
 
     @property
@@ -47,21 +52,23 @@ class Article(TimeStampUUIDModel):
         time_to_read = ArticleReadTimeEngine(self)
         return time_to_read.get_read_time()
 
-    def get_average_rating (self):
-        if Rating.objects.all().count()> 0 :
+    def get_average_rating(self):
+        if Rating.objects.all().count() > 0:
             rating = (
-                Rating.objects.filter(article=self.pkid).all().aggregate(Avg('value'))  
+                Rating.objects.filter(article=self.pkid).all().aggregate(Avg("value"))
             )
             return round(rating["value__avg"], 1) if rating["value__avg"] else 0
-        return 0          
-class ArticleViews (TimeStampUUIDModel):
+        return 0
+
+
+class ArticleViews(TimeStampUUIDModel):
     ip = models.CharField(verbose_name=_("ip_address"), max_length=250)
-    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name="article_views")
+    article = models.ForeignKey(
+        Article, on_delete=models.CASCADE, related_name="article_views"
+    )
 
     def __str__(self):
-        return (
-            f"Total Views on {self.article.title} is {self.article.views} views"
-        )
+        return f"Total Views on {self.article.title} is {self.article.views} views"
 
     class Meta:
         verbose_name = _("Total views on Article")

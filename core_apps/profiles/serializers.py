@@ -14,25 +14,26 @@ class ProfileSerializers(serializers.ModelSerializer):
     profile_photo = serializers.SerializerMethodField()
     country = CountryField(name_only=True)
     following = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = Profile
         fields = (
-            'id',
-            'username',
-            'first_name',
-            'last_name',
-            'full_name',
-            'email',
-            'profile_photo',
-            'phone_number',
-            'about_me',
-            'gender',
-            'country',
-            'city',
-            'twitter_handle',
-            'following',
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "full_name",
+            "email",
+            "profile_photo",
+            "phone_number",
+            "about_me",
+            "gender",
+            "country",
+            "city",
+            "twitter_handle",
+            "following",
         )
+
     def get_full_name(self, obj):
         first_name = obj.user.first_name.title()
         last_name = obj.user.last_name.title()
@@ -54,18 +55,20 @@ class ProfileSerializers(serializers.ModelSerializer):
         following_status = current_user_profile.is_following(followee)
         return following_status
 
+
 class UpdateProfileSerializers(serializers.ModelSerializer):
     country = CountryField(name_only=True)
+
     class Meta:
         model = Profile
         fields = (
-            'profile_photo',
-            'phone_number',
-            'about_me',
-            'gender',
-            'country',
-            'city',
-            'twitter_handle',
+            "profile_photo",
+            "phone_number",
+            "about_me",
+            "gender",
+            "country",
+            "city",
+            "twitter_handle",
         )
 
 
@@ -74,15 +77,15 @@ class FollowingSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source="user.first_name", read_only=True)
     last_name = serializers.CharField(source="user.last_name", read_only=True)
     following = serializers.BooleanField(default=True)
+
     class Meta:
         model = Profile
         fields = (
-            'username',
-            'first_name',
-            'last_name',
-            'profile_photo',
-            'about_me',
-            'twitter_handle',
-            'following',
+            "username",
+            "first_name",
+            "last_name",
+            "profile_photo",
+            "about_me",
+            "twitter_handle",
+            "following",
         )
-

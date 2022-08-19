@@ -8,11 +8,15 @@ from rest_framework.views import APIView
 
 from auth_api.settings.local import DEFAULT_FROM_EMAIL
 
-from .exceptions import CantFollowYourself , NotYourProfile
+from .exceptions import CantFollowYourself, NotYourProfile
 from .models import Profile
 from .pagination import ProfilePagination
 from .renderers import ProfileJSONRenderer, ProfilesJSONRenderer
-from .serializers import ProfileSerializers, UpdateProfileSerializers, FollowingSerializer
+from .serializers import (
+    ProfileSerializers,
+    UpdateProfileSerializers,
+    FollowingSerializer,
+)
 
 User = get_user_model()
 
@@ -37,7 +41,7 @@ User = get_user_model()
 #     try:
 #         user_profile = Profile.objects.get(user__username=username)
 #     except Profile.DoesNotExist:
-#         raise NotFound("Profile not found") 
+#         raise NotFound("Profile not found")
 
 
 class ProfileList(generics.ListAPIView):
@@ -47,19 +51,21 @@ class ProfileList(generics.ListAPIView):
     renderer_classes = [ProfilesJSONRenderer]
     pagination_class = ProfilePagination
 
+
 class ProfileDetail(generics.RetrieveAPIView):
     serializer_class = ProfileSerializers
     permission_classes = [permissions.IsAuthenticated]
     queryset = Profile.objects.select_related("user")
     renderer_classes = [ProfileJSONRenderer]
-    
+
     def retrieve(self, request, username, *args, **kwargs):
         try:
             user_profile = Profile.objects.get(user__username=username)
         except Profile.DoesNotExist:
-            raise NotFound("Profile not found") 
+            raise NotFound("Profile not found")
         serializer = self.serializer_class(user_profile, context={"request": request})
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class UpdateProfile(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -85,6 +91,7 @@ class UpdateProfile(APIView):
             serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
 @api_view(["GET"])
 @permission_classes([permissions.IsAuthenticated])
 def get_my_followers(request, username):
@@ -99,7 +106,7 @@ def get_my_followers(request, username):
     formatted_response = {
         "status_code": status.HTTP_200_OK,
         "followers": serializer.data,
-        "num_of_followers": len(serializer.data)
+        "num_of_followers": len(serializer.data),
     }
     return Response(formatted_response, status.HTTP_200_OK)
 

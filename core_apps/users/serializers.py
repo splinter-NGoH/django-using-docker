@@ -21,18 +21,19 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            'id',
-            'username',
-            'first_name',
-            'last_name',
-            'full_name',
-            'email',
-            'phone_number',
-            'profile_photo',
-            'country',
-            'city',
-            'gender',
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "full_name",
+            "email",
+            "phone_number",
+            "profile_photo",
+            "country",
+            "city",
+            "gender",
         )
+
     def get_first_name(self, obj):
         return obj.firstname.title()
 
@@ -47,10 +48,11 @@ class UserSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super(User, self).to_representation(instance)
         if instance.is_superuser:
-            representation['admin'] = True
+            representation["admin"] = True
         return representation
+
 
 class CreateUserSerializer(UserCreateSerializer):
     class Meta:
         model = User
-        fields = ('id','username', 'password', 'email', 'first_name', 'last_name')
+        fields = ("id", "username", "password", "email", "first_name", "last_name")
